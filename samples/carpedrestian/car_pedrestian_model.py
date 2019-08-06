@@ -1,5 +1,5 @@
 import os
-# import sys
+import sys
 # import random
 # import math
 # import re
@@ -15,14 +15,14 @@ ROOT_DIR = os.path.abspath("../../")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
-# from mrcnn import utils
+from mrcnn import utils
 # from mrcnn import visualize
 from mrcnn.visualize import apply_mask
-# import mrcnn.model as modellib
+import mrcnn.model as modellib
 # from mrcnn.model import log
 
 import cv2
-from tqdm import tqdm
+# from tqdm import tqdm
 
 
 class CarPedrestianModel():
@@ -50,6 +50,11 @@ class CarPedrestianModel():
         # config = shapes.ShapesConfig()
 
         # MS COCO Dataset
+        # Root directory of the project
+        COCO_DIR = os.path.abspath("../coco/")
+
+        # Import Mask RCNN
+        sys.path.append(COCO_DIR)  # To find local version of the library
         import coco
         config = coco.CocoConfig()
         COCO_DIR = "path to COCO dataset"  # TODO: enter value here
@@ -80,7 +85,7 @@ class CarPedrestianModel():
 
         # Create model in inference mode
         with tf.device(DEVICE):
-            model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR,
+            self.model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR,
                                       config=config)
 
         # Set weights file path
@@ -93,24 +98,23 @@ class CarPedrestianModel():
 
         # Load weights
         print("Loading weights ", weights_path)
-        model.load_weights(weights_path, by_name=True)
+        self.model.load_weights(weights_path, by_name=True)
 
 
-    def predict(self, image, verbose=0):
-        results = model.detect([image], verbose=verbose)
+    def detect(self, image, verbose=0):
+        results = self.model.detect([image], verbose=verbose)
         return results
 
-    def draw_results(self, results):
+    def draw_results(self, image, results):
         # draw bounding boxes and segmentation masks
         r = results[0]
-        frame = merge_results_on_image(frame, r['rois'], r['masks'], r['class_ids'], 
-                                    labels, r['scores'],
-                                    title="Predictions") #dataset.class_names
-        return frame
+        image = merge_results_on_image(image, r['rois'], r['masks'], r['class_ids'], 
+                                    labels, r['scores']) #dataset.class_names
+        return image
 
-    def predict_and_draw_results(self, image, verbose=0):
-        results = self.predict(image, verbose)
-        image_with_masks = draw_results(results)
+    def detect_and_draw_results(self, image, verbose=0):
+        results = self.detect(image, verbose)
+        image_with_masks = self.draw_results(image, results)
         return image_with_masks
 
 
