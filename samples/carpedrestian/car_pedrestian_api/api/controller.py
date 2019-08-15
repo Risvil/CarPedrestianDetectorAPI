@@ -4,19 +4,15 @@ import os
 import sys
 import pathlib
 from werkzeug.utils import secure_filename
+import cv2
 
 from api.config import get_logger, UPLOAD_FOLDER
 from api.validation import allowed_file
 from api import __version__ as api_version
 
-
 MODEL_PATH = pathlib.Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(MODEL_PATH))
-from supermodelmaximum.car_pedrestian_model import make_single_prediction
-
-
-
-import cv2
+from car_pedrestian_model.car_pedrestian_model import make_single_prediction
 
 
 _logger = get_logger(logger_name=__name__)
@@ -71,19 +67,12 @@ def predict_image():
             os.remove(full_filename)
 
 
-            # TODO: Save image to disk, then use "send_image"
+            # Save image to disk, then use "send_image"
             # or io.BytesIO to send the image as a byte array
-
-        #     _logger.debug(f'Outputs: {result}')
-
-        # readable_predictions = result.get('readable_predictions')
-        # version = result.get('version')
-
-            # _logger.warning("Result:")
-            # _logger.warning(result)
-
+            # TODO: Check how to do it in memory
             out_filename = str(UPLOAD_FOLDER / 'output.jpg')
             cv2.imwrite(out_filename, result)
+
             return send_file(out_filename, mimetype='image/jpg')
 
         return jsonify(

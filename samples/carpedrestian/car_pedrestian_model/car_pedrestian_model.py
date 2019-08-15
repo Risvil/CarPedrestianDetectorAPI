@@ -1,32 +1,15 @@
 import os
 import sys
-# import random
-# import math
-# import re
-# import time
+import cv2
 import numpy as np
 import tensorflow as tf
-# import matplotlib
-# import matplotlib.pyplot as plt
-# import matplotlib.patches as patches
-
-# Root directory of the project
-# ROOT_DIR = os.path.abspath("../../")
-# ROOT_DIR = os.path.abspath("../../../")
 import pathlib
-ROOT_DIR = str(pathlib.Path(__file__).resolve().parent.parent.parent.parent)
-# sys.path.append(str(MODEL_PATH))
 
 # Import Mask RCNN
+ROOT_DIR = str(pathlib.Path(__file__).resolve().parent.parent.parent.parent)
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn import utils
-# from mrcnn import visualize
-# from mrcnn.visualize import apply_mask
 import mrcnn.model as modellib
-# from mrcnn.model import log
-
-import cv2
-# from tqdm import tqdm
 
 
 class CarPedrestianModel():
@@ -55,7 +38,6 @@ class CarPedrestianModel():
 
         # MS COCO Dataset
         # Root directory of the project
-        # COCO_DIR = os.path.abspath("../coco/")
         COCO_DIR = str(pathlib.Path(__file__).resolve().parent.parent.parent / 'coco')
 
         # Import Mask RCNN
