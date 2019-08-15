@@ -11,13 +11,17 @@ import tensorflow as tf
 # import matplotlib.patches as patches
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("../../")
+# ROOT_DIR = os.path.abspath("../../")
+# ROOT_DIR = os.path.abspath("../../../")
+import pathlib
+ROOT_DIR = str(pathlib.Path(__file__).resolve().parent.parent.parent.parent)
+# sys.path.append(str(MODEL_PATH))
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn import utils
 # from mrcnn import visualize
-from mrcnn.visualize import apply_mask
+# from mrcnn.visualize import apply_mask
 import mrcnn.model as modellib
 # from mrcnn.model import log
 
@@ -51,7 +55,8 @@ class CarPedrestianModel():
 
         # MS COCO Dataset
         # Root directory of the project
-        COCO_DIR = os.path.abspath("../coco/")
+        # COCO_DIR = os.path.abspath("../coco/")
+        COCO_DIR = str(pathlib.Path(__file__).resolve().parent.parent.parent / 'coco')
 
         # Import Mask RCNN
         sys.path.append(COCO_DIR)  # To find local version of the library
@@ -213,6 +218,29 @@ allowed_labels = [
     "truck"
 ]
 
+model = CarPedrestianModel()
+
+def make_single_prediction(image_name, image_directory):
+    # Steps:
+    # 1. Load image
+    # 2. Perform detection
+    # 3. Draw masks on image
+    # 4. Return image
+
+    # 1. Load image
+    image_fullname = os.path.join(image_directory, image_name)
+    image = cv2.imread(image_fullname)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # 2. Perform detection
+    results = model.detect(image)
+
+    # 3. Draw masks on image
+    output = model.draw_results(image, results)
+
+    # 4. Return image
+    return output
+
 
 def get_class_color(class_label):
     label_color_dict = {
@@ -227,6 +255,17 @@ def get_class_color(class_label):
     }
 
     return label_color_dict[class_label]        
+
+
+def apply_mask(image, mask, color, alpha=0.5):
+    """Apply the given mask to the image.
+    """
+    for c in range(3):
+        image[:, :, c] = np.where(mask == 1,
+                                  image[:, :, c] *
+                                  (1 - alpha) + alpha * color[c] * 255,
+                                  image[:, :, c])
+    return image
 
 
 def merge_results_on_image(image, boxes, masks, class_ids, class_names,

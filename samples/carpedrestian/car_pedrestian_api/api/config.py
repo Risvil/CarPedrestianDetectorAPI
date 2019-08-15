@@ -8,8 +8,8 @@ import sys
 PACKAGE_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 FORMATTER = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelnamee)s -"
-    "%(funcname)s:%(lineno)d - %(message)s"
+    "%(asctime)s - %(name)s - %(levelname)s -"
+    "%(funcName)s:%(lineno)d - %(message)s"
 )
 LOG_DIR = PACKAGE_ROOT / 'logs'
 LOG_DIR.mkdir(exist_ok=True)
