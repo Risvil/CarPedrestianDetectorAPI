@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath samples/carpedrestian/car_pedrestian_api/ --access-logfile - --error-logfile - run:application
