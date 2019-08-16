@@ -10,4 +10,9 @@ opencv-python
 h5py
 imgaug
 IPython[all]
-flask
+
+# api
+flask==1.0.2
+
+# Deployment
+gunicorn==19.9.0
