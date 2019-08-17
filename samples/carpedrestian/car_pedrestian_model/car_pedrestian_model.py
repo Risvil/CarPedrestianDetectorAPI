@@ -61,8 +61,8 @@ class CarPedrestianModel():
         # Useful if you're training a model on the same 
         # machine, in which case use CPU and leave the
         # GPU for training.
-        # DEVICE = "/cpu:0"  # /cpu:0 or /gpu:0
-        DEVICE = "/gpu:0"
+        DEVICE = "/cpu:0"  # /cpu:0 or /gpu:0
+        # DEVICE = "/gpu:0"
 
         # Inspect the model in training or inference modes
         # values: 'inference' or 'training'
